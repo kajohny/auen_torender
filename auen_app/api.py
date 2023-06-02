@@ -356,13 +356,13 @@ def search():
 def feed(user_id):
     musics = db.session.query(Music.id, Music.music_title, Music.music_source, User.name, Albums.album_img, Albums.album_title, 
                               Music.time_added.label('time_added'))\
-            .join(User, Music.artist_id == User.id).join(Music, and_(Albums.id == Music.album_id, Music.author_id == User.id))\
+            .join(User, Music.author_id == User.id).join(Music, and_(Albums.id == Music.album_id, Music.author_id == User.id))\
             .join(Followers, Followers.followed_id == User.id).filter(Followers.follower_id == user_id)\
             .join(Albums, Albums.id == Music.album_id)\
             .group_by(Music.id, User.name, Music.music_title, Music.music_source, Music.time_added, Albums.album_title, 
                       Albums.album_img).order_by(desc('time_added')).all()
     
-    return audio_schema.jsonify(musics)
+    return musics_schema.jsonify(musics)
 
 @api.route('/stream/api/', methods=["POST"])
 def stream():
