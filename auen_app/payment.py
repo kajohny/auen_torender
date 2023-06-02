@@ -19,8 +19,8 @@ def create_checkout_session():
             }
         ],
         mode="subscription",
-        success_url = "http://127.0.0.1:5000/save_checkout",
-        cancel_url = "http://127.0.0.1:5000/"
+        success_url = "https://auen.onrender.com/save_checkout",
+        cancel_url = "https://auen.onrender.com/"
     )   
     return redirect(checkout_session.url, code=303)
 
