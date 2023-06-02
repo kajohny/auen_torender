@@ -254,17 +254,17 @@ def upload_audio(artist_id):
                         .group_by(WaitingAudios.id, User.name, WaitingAudios.title, WaitingAudios.source, WaitingReleases.album_title, 
                       WaitingReleases.album_img).all()
     
-    waiting_releases = db.session.query(WaitingReleases.album_title, WaitingReleases.album_img, WaitingReleases.author_id).\
+    waiting_releases = db.session.query(WaitingReleases.id, WaitingReleases.album_title, WaitingReleases.album_img, WaitingReleases.author_id).\
                         filter(WaitingReleases.author_id == artist_id).first()
     
-    add_release = Albums(album_title=waiting_releases.album_title, album_img=waiting_releases.album_img, author_id=artist_id)
+    add_release = Albums(id=waiting_releases.id + 5, album_title=waiting_releases.album_title, album_img=waiting_releases.album_img, author_id=artist_id)
     db.session.add(add_release)
     db.session.commit()
 
     release = Albums.query.filter_by(album_title=waiting_releases.album_title).first()
 
     for music in musics:
-        add_audio = Music(music_title=music.title, music_source=music.source, author_id=artist_id, album_id=release.id, 
+        add_audio = Music(id = music.id + 15, music_title=music.title, music_source=music.source, author_id=artist_id, album_id=release.id, 
                            featured_artist=music.featured_artist)
         db.session.add(add_audio)
         db.session.commit()

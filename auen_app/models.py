@@ -79,7 +79,7 @@ artists_schema = ArtistsSchema(many=True)
 
 class MusicSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'music_title', 'music_source', 'author_name', 'album_img', 'album_title' ,'time_added', 'streams', 'featured_artist')
+        fields = ('id', 'music_title', 'music_source', 'name', 'album_img', 'album_title' ,'time_added', 'streams', 'featured_artist')
 
 class AudioSchema(ma.Schema):
     class Meta:
