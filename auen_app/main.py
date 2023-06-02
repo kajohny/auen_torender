@@ -27,8 +27,6 @@ def index():
         
     albums = db.session.query(Albums.id, Albums.album_title, Albums.album_img, User.name, User.id.label('artist_id')).join(User, Albums.author_id == User.id)\
                         .filter(Albums.isalbum==True).all()
-
-    genres = Genres.query.all()
     
     artists = User.query.filter_by(isartist=True).all()
 
@@ -36,37 +34,45 @@ def index():
                     .join(User, Music.author_id == User.id).join(Albums, Albums.id == Music.album_id)\
                     .order_by(desc(Music.time_added)).limit(30).all()
     
-    return render_template('index.html', musics=musics, new_musics=new_musics, albums=albums, genres=genres, artists=artists)
+    return render_template('index.html', musics=musics, new_musics=new_musics, albums=albums, artists=artists)
 
-@main.route('/search', methods=['GET', 'POST'])
-def search():
-    if request.method == "POST":
-        title = request.form.get('search')
-        search = "%{}%".format(title)
+    @main.route('/search', methods=['GET', 'POST'])
+    def search():
+        if request.method == "POST":
+            title = request.form.get('search')
+            search = "%{}%".format(title)
 
-        if current_user.is_authenticated:
-            playlists = Playlists.query.filter_by(user_id=current_user.id).all()
-            audios = db.session.query(Music.id, Music.music_title, Music.music_source, User.name, Albums.album_img,
-                                Music.streams, db.session.query(Favourites.id)\
-                .filter(and_(Music.id == Favourites.music_id, Favourites.user_id == current_user.id)).limit(1).label('is_favourite'))\
-                .join(User, Music.author_id == User.id).join(Albums, Albums.id == Music.album_id)\
-                .filter(Music.music_title.ilike(search)).limit(5).all()  
+            if current_user.is_authenticated:
+                playlists = Playlists.query.filter_by(user_id=current_user.id).all()
 
-        else:
-            audios = db.session.query(Music.id, Music.music_title, Music.music_source, User.name, Albums.album_img,
-                                Music.streams)\
-                .join(User, Music.author_id == User.id).join(Albums, Albums.id == Music.album_id)\
-                .filter(Music.music_title.ilike(search)).limit(5).all()  
-            
-        authors = db.session.query(User.id, User.name, User.image).filter(User.isartist,User.name.ilike(search)).all()
+                audios = db.session.query(Music.id, Music.music_title, Music.music_source, User.name, Albums.album_img,
+                                    Music.streams, db.session.query(Favourites.id)\
+                    .filter(and_(Music.id == Favourites.music_id, Favourites.user_id == current_user.id)).limit(1).label('is_favourite'))\
+                    .join(User, Music.author_id == User.id).join(Albums, Albums.id == Music.album_id)\
+                    .filter(Music.music_title.ilike(search)).limit(5).all()  
+                
+                authors = db.session.query(User.id, User.name, User.image).filter(User.isartist,User.name.ilike(search)).all()
 
-        albums = db.session.query(Albums.id, Albums.album_title, Albums.album_img, User.name, User.id.label('artist_id'))\
-                                    .join(User, Albums.author_id == User.id)\
-                                    .filter(Albums.album_title.ilike(search)).all()
-        
-        print(len(albums))
+                albums = db.session.query(Albums.id, Albums.album_title, Albums.album_img, User.name, User.id.label('artist_id'))\
+                                        .join(User, Albums.author_id == User.id)\
+                                        .filter(Albums.album_title.ilike(search)).all()
+                
+                return render_template("search.html", audios=audios, authors=authors, albums=albums, playlists=playlists)
 
-        return render_template("search.html", audios=audios, authors=authors, albums=albums, playlists=playlists)
+
+            else:
+                audios = db.session.query(Music.id, Music.music_title, Music.music_source, User.name, Albums.album_img,
+                                    Music.streams)\
+                    .join(User, Music.author_id == User.id).join(Albums, Albums.id == Music.album_id)\
+                    .filter(Music.music_title.ilike(search)).limit(5).all()  
+                
+                authors = db.session.query(User.id, User.name, User.image).filter(User.isartist,User.name.ilike(search)).all()
+
+                albums = db.session.query(Albums.id, Albums.album_title, Albums.album_img, User.name, User.id.label('artist_id'))\
+                                        .join(User, Albums.author_id == User.id)\
+                                        .filter(Albums.album_title.ilike(search)).all()
+
+                return render_template("search.html", audios=audios, authors=authors, albums=albums)
 
 
 @main.route('/album.html')
