@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<!----Live Radio Section Start---->
+<div class="ms_top_artist">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ms_heading">
+                    <h1>Your Playlists</h1>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <div class="ms_rcnt_box marger_bottom25">
+                    <div class="ms_rcnt_box_img">
+                        <img src="{{ url_for('static', filename='images/favourites.jpg') }}" alt="" class="img-fluid">
+                        <div class="ms_main_overlay">
+                            <div class="ms_box_overlay"></div>
+                            <div class="ms_play_icon">
+                                <img src="{{ url_for('static', filename='images/svg/play.svg') }}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ms_rcnt_box_text">
+                        <h3><a href="{{ url_for('main.favourites') }}">My Favourites</a></h3>
+                        <p>{{ counter_f }} songs</p>
+                    </div>
+                </div>
+            </div>
+            {% for playlist in playlists %}
+            <div class="col-lg-2 col-md-6">
+                <div class="ms_rcnt_box marger_bottom25">
+                    <form action="{{ url_for('main.playlist_music', playlist_id=playlist.id) }}" method="GET">
+                        <div class="ms_rcnt_box_img">
+                            <img src="{{ url_for('static', filename='images/myplaylist.jpg') }}" alt=""
+                                class="img-fluid">
+                            <div class="ms_main_overlay">
+                                <div class="ms_box_overlay"></div>
+                                <div class="ms_play_icon">
+                                    <button class="btn" style="background-color:transparent"><img src="{{ url_for('static', filename='images/svg/play.svg') }}"
+                                            alt=""></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="ms_rcnt_box_text">
+                        <h3><a href="#">{{ playlist.playlist_name }}</a></h3>
+                        <p>{{ playlist.counter }} songs</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="col-lg-2">
+                <div class="ms_rcnt_box marger_bottom25">
+                    <div class="create_playlist">
+                        <a href="{{ url_for('main.create_playlist') }}"><i class="ms_icon icon_playlist"></i></a>
+                    </div>
+                    <div class="ms_rcnt_box_text">
+                        <h3><a href="{{ url_for('main.create_playlist') }}">Create New Playlist</a></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

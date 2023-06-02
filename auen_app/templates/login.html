@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<!----Edit Profile Wrapper Start---->
+<div class="ms_profile_wrapper">
+    <h1>Login</h1>
+    <div class="ms_profile_box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <form action="" method="POST">
+            <div class="ms_pro_form">
+                <div class="form-group">
+                    <label>Your Email</label>
+                    <input type="text" class="form-control" name="email" required>
+                    <br>
+                    <label>Your Password *</label>
+                    <input type="password" class="form-control" name="password" required>
+                </div>
+                <!-- <div class="form-group">
+                    
+                </div> -->
+                <div class="pro-form-btn text-center marger_top15">
+                    <button class="ms_btn">Sign in</button>
+                </div>
+                <br>
+                <p>Don't Have An Account? <a href="{{url_for('auth.registration')}}" class="ms_btn"> register here</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

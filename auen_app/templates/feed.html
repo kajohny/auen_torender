@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+{% if current_user.isartist %}
+<div class="ms_free_download ms_purchase_wrapper">
+    <div class="ms_heading">
+        <h1>Collaborations</h1>
+    </div>
+    <div class="album_inner_list">
+        <div class="album_list_wrapper">
+            {% for collaboration in collaborations %}
+
+            <p style="color:white; size: 10px;"><a href="/artists/{{collaboration.first_artist}}"
+                    class="ms_btn">{{collaboration.name}}</a> wants to
+                collaborate with you <button class="btn-success accept_btn"
+                    first_artist="{{collaboration.first_artist}}">Accept</button>
+                <button class="btn-danger deny_btn" first_artist="{{collaboration.first_artist}}">Deny</button></p>
+            <br>
+            {% endfor %}
+            <div class="ms_view_more">
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="ms_weekly_wrapper">
+    <div class="ms_weekly_inner">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ms_heading">
+                    {% if musics|length == 0 %}
+                    <h1>No updates from your followed artists</h1>
+                    {% else %}
+                    <h1>Feed</h1>
+                    {% endif %}
+                </div>
+            </div>
+            {% for music in musics %}
+            <div class="ms_weekly_box">
+                <div class="weekly_left">
+                    <span class="w_top_no">
+                        {{ loop.index}}
+                    </span>
+                    <div class="w_top_song">
+                        <div class="w_tp_song_img">
+                            <img src="{{ url_for('static', filename=music.album_img) }}" alt="" class="img-fluid">
+                            <div class="ms_song_overlay">
+                            </div>
+                            <div class="ms_play_icon playing" music_source="{{ music.music_source }}"
+                                musics="{{ musics }}" music_id="{{ music.id }}" artist_name="{{ music.name }}"
+                                music_title="{{ music.music_title }}" album_img="{{ music.album_img }}">
+                                <img src="{{ url_for('static', filename='images/svg/play.svg') }}" alt="">
+                            </div>
+                        </div>
+                        <div class="w_tp_song_name">
+                            <h3><a href="#">{{ music.music_title }}</a></h3>
+                            <p>{{ music.name }}</p>
+                            <p>Posted: {{ music.time_added }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="weekly_right">
+                    <i class="far fa-heart text-white" style="font-size: 24px"></i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.accept_btn').click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/collaboration/accept",
+                data: {
+                    first_artist: $(this).attr("first_artist")
+                }
+            })
+            document.location.reload();
+        })
+        $('.deny_btn').click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/collaboration/deny",
+                data: {
+                    first_artist: $(this).attr("first_artist")
+                }
+            })
+            document.location.reload();
+        })
+    })
+</script>
+{% endblock %}

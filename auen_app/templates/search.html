@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="ms_view_more"></div>
+<div class="ms_heading">
+    <h1>Tracks</h1>
+</div>
+<div class="album_inner_list">
+    <div class="album_list_wrapper">
+        <ul class="album_list_name">
+            <li>#</li>
+            <li>Song Title</li>
+            <li>Artist</li>
+            <li class="text-center">Listenings</li>
+            <li class="text-center">To Favourites</li>
+            <li class="text-center">To Playlists</li>
+        </ul>
+        {% for music in audios %}
+        <ul>
+            <li><a href="#"><span class="play_no">{{ loop.index }}</span><span class="play_hover ms_play_icon playing"
+                        music_source="{{ music.music_source }}" musics="{{ audios }}" music_id="{{ music.id }}"
+                        artist_name="{{ music.name }}" music_title="{{ music.music_title }}"
+                        album_img="{{ music.album_img }}"></span></a></li>
+            <li><a href="#">{{ music.music_title}}</a></li>
+            <li><a href="#">{{ music.name }}</a></li>
+            <li class="text-center"><a href="#">{{ music.streams }}</a></li>
+            {% if current_user.is_authenticated %}
+            <li class="text-center"><i
+                    class="fv_btn btn text-white fa-heart {{ 'far' if music.is_favourite == None else 'fas' }}"
+                    music_id="{{ music.id }}"></i></li>
+            {% else %}
+            <li class="text-center"><i class="far fa-heart text-white" style="font-size: 24px"></i></li>
+            {% endif %}
+            <li class="text-center ms_more_icon"><a href="javascript:;"><span
+                        class="ms_icon1 ms_active_icon icon_playlist"></span></a>
+                <ul class="more_option">
+                    {% for playlist in playlists %}
+                    <li class="pl_btn" playlist_id="{{ playlist.id }}" music_id="{{ music.id }}"><a href="#"><span
+                                class="opt_icon"><span
+                                    class="icon icon_playlst"></span></span>{{ playlist.playlist_name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+<div class="ms_view_more">
+</div>
+<div class="ms_heading">
+    <h1>Artists</h1>
+</div>
+<div class="ms_feature_slider swiper-container">
+    <div class="swiper-wrapper">
+        {% for author in authors %}
+        <div class="swiper-slide">
+            <div class="ms_rcnt_box">
+                <div class="ms_rcnt_box_img">
+                    <img src="{{ url_for('static', filename=author.image) }}" alt="">
+                    <div class="ms_main_overlay">
+                        <div class="ms_box_overlay"></div>
+                        <div class="ms_more_icon">
+                            <img src="{{ url_for('static', filename='images/svg/more.svg') }}" alt="">
+                        </div>
+                        <ul class="more_option">
+                            <li><a href="#"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add
+                                    To
+                                    Favourites</a>
+                            </li>
+                            <li><a href="#"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add
+                                    To Queue</a></li>
+                            <li><a href="#"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download
+                                    Now</a></li>
+                            <li><a href="#"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add
+                                    To Playlist</a>
+                            </li>
+                            <li><a href="#"><span class="opt_icon"><span class="icon icon_share"></span></span>Share</a>
+                            </li>
+                        </ul>
+                        <form action="{{ url_for('main.single_artist', artist_id=author.id) }}" method="GET">
+                            <div class="ms_play_icon">
+                                <button class="btn" style="background-color:transparent"><img
+                                        src="{{ url_for('static', filename='images/svg/play.svg') }}" alt=""></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ms_rcnt_box_text">
+                    <h3><a href="#">{{ author.name }}</a></h3>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="swiper-button-next1 slider_nav_next"></div>
+<div class="swiper-button-prev1 slider_nav_prev"></div>
+
+<div class="ms_fea_album_slider">
+    <div class="ms_heading">
+        <h1>Albums</h1>
+    </div>
+    <div class="ms_album_slider swiper-container">
+        <div class="swiper-wrapper">
+            {% for album in albums %}
+            <div class="swiper-slide">
+                <div class="ms_rcnt_box">
+                    <div class="ms_rcnt_box_img">
+                        <img src="{{ url_for('static', filename=album.album_img) }}" alt="">
+                        <div class="ms_main_overlay">
+                            <div class="ms_box_overlay"></div>
+                            <div class="ms_more_icon">
+                                <img src="{{ url_for('static', filename='images/svg/more.svg') }}" alt="">
+                            </div>
+                            <ul class="more_option">
+                                <li><a href="#"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To
+                                        Favourites</a>
+                                </li>
+                                <li><a href="#"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add
+                                        To Queue</a></li>
+                                <li><a href="#"><span class="opt_icon"><span
+                                                class="icon icon_dwn"></span></span>Download
+                                        Now</a></li>
+                                <li><a href="#"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add
+                                        To Playlist</a>
+                                </li>
+                                <li><a href="#"><span class="opt_icon"><span
+                                                class="icon icon_share"></span></span>Share</a>
+                                </li>
+                            </ul>
+                            <form action="{{ url_for('main.album_single', album_id=album.id) }}" method="GET">
+                                <div class="ms_play_icon">
+                                    <button class="btn" style="background-color:transparent"><img
+                                            src="{{ url_for('static', filename='images/svg/play.svg') }}"
+                                            alt=""></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="ms_rcnt_box_text">
+                        <h3><a href="#">{{ album.album_title }}</a></h3>
+                        <p>{{ album.name }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="swiper-button-next3 slider_nav_next"></div>
+    <div class="swiper-button-prev3 slider_nav_prev"></div>
+</div>
+<div class="">
+    <script>
+        $(document).ready(function () {
+            $('.pl_btn').click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/playlist/" + action,
+                    data: {
+                        music_id: $(this).attr("music_id"),
+                        playlist_id: $(this).attr("playlist_id")
+                    }
+                })
+            })
+            $('.fv_btn').click(function () {
+                let el = $(this)
+                let action = 'add';
+                let firstClass = 'far';
+                let secondClass = 'fas';
+
+                if (el.hasClass('fas')) {
+                    action = 'remove';
+                    firstClass = 'fas';
+                    secondClass = 'far';
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/favourites/" + action,
+                    data: {
+                        music_id: $(this).attr("music_id")
+                    },
+                    success: function (resp) {
+                        el.removeClass(firstClass).addClass(secondClass)
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                })
+            })
+        })
+    </script>
+    <script>
+        var max = 8;
+        $('ul, ol').each(function () {
+            $(this).find('li').each(function (index) {
+                if (index >= max) $(this).hide()
+            })
+        })
+    </script>
+</div>
+{% endblock %}

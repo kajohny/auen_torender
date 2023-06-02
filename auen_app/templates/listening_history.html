@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="ms_weekly_wrapper">
+    <div class="ms_weekly_inner">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ms_heading">
+                    <h1>Listening History</h1>
+                </div>
+            </div>
+            {% for music in musics %}
+
+            <div class="ms_weekly_box">
+                <div class="weekly_left">
+                    <span class="w_top_no">
+                        {{ loop.index}}
+                    </span>
+                    <div class="w_top_song">
+                        <div class="w_tp_song_img">
+                            <img src="{{ url_for('static', filename=music.album_img) }}" alt="" class="img-fluid">
+                            <div class="ms_song_overlay">
+                            </div>
+                            <div class="ms_play_icon playing" music_source="{{ music.music_source }}" musics="{{ musics }}"
+                                music_id="{{ music.id }}" artist_name="{{ music.name }}" music_title="{{ music.music_title }}"
+                                album_img="{{ music.album_img }}">
+                                <img src="{{ url_for('static', filename='images/svg/play.svg') }}" alt="">
+                            </div>
+                        </div>
+                        <div class="w_tp_song_name">
+                            <h3><a href="#">{{ music.music_title }}</a></h3>
+                            <p>{{ music.name }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="weekly_right">
+                    <i class="fv_btn btn text-white fa-heart {{ 'far' if music.is_favourite == None else 'fas' }}"
+                        music_id="{{ music.id }}"></i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.fv_btn').click(function () {
+            let el = $(this)
+            let action = 'add';
+            let firstClass = 'far';
+            let secondClass = 'fas';
+
+            if (el.hasClass('fas')) {
+                action = 'remove';
+                firstClass = 'fas';
+                secondClass = 'far';
+            }
+            $.ajax({
+                type: "POST",
+                url: "/favourites/" + action,
+                data: {
+                    music_id: $(this).attr("music_id")
+                },
+                success: function (resp) {
+                    el.removeClass(firstClass).addClass(secondClass)
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            })
+        })
+    })
+</script>
+{% endblock %}

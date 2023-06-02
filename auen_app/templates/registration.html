@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<!----Edit Profile Wrapper Start---->
+<div class="ms_profile_wrapper">
+    <h1>Register</h1>
+    <div class="ms_profile_box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <form action="" method="POST">
+            <div class="ms_pro_form">
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Your Email *</label>
+                    <input type="text" class="form-control" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Your Password *</label>
+                    <input type="password" class="form-control" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password *</label>
+                    <input type="password" class="form-control" name="password_confirm" required>
+                </div>
+                <div class="pro-form-btn text-center marger_top15">
+                    <button class="ms_btn">Sign up</button>
+                </div>
+                <br>
+                <p>Already Have An Account? <a href="{{ url_for('auth.login') }}" class="ms_btn">login here</a></p>
+                <p>
+                    <input type="checkbox" id="isartist" name="isartist" value="artist"/>
+                    <label for="isartist">Artist?</label>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "index.html" %}
+{% block modal %}
+<div id="myModal1" class="modal  centered-modal" role="dialog">
+    <div class="modal-dialog login_dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal">
+                <i class="fa_icon form_close"></i>
+            </button>
+            <div class="modal-body">
+                <div class="ms_register_img">
+                    <img src="{{ url_for('static', filename='images/register_img.png') }}" alt="" class="img-fluid" />
+                </div>
+                <form action="{{ url_for('auth.login') }}" method="POST">
+                    <div class="ms_register_form">
+                        <h2>login / Sign in</h2>
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <div class="notification is-danger">
+                            {{ messages[0] }}
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+                        <div class="form-group">
+                            <input type="text" placeholder="Enter Your Email" class="form-control" name="email"
+                                id="email">
+                            <span class="form_icon">
+                                <i class="fa_icon form-envelope" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Enter Password" class="form-control" name="password"
+                                id="password">
+                            <span class="form_icon">
+                                <i class="fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div class="remember_checkbox">
+                            <label>Keep me signed in
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <input type="hidden" value="login" name="login">
+                        <a href="" class="ms_btn btn_login">Login now</a>
+                        <button class="btn">Sign in</button>
+                        <div class="popup_forgot">
+                            <a href="#">Forgot Password ?</a>
+                        </div>
+                        <p>Don't Have An Account? <a href="#myModal" data-toggle="modal"
+                                class="ms_modal1 hideCurrentModel">register here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function() {
+        $("#myModal1").modal("show")    
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up Form</title>
+        <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/sign.css') }}">
+        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/iconA.png') }}">
+
+
+    </head>
+
+    <body>
+        <form action="" method="POST">
+
+            <div class="logo">
+                <a href=""><img src="{{url_for('static', filename='images/logo_SIGN.png') }}" alt=""></a>
+            </div>
+
+            <fieldset>
+
+                <label for="name">Nickname</label>
+                <input type="text" id="name" name="name">
+
+                <label for="mail">Email</label>
+                <input type="email" id="mail" name="email">
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+
+                <label for="password">Confirm Password</label>
+                <input type="password" id="password" name="password_confirm">
+
+                <label>Who are you?</label>
+                <input type="radio" id="under_13" value="artist" name="isartist"><label for="under_13"
+                    class="light">Artist
+                    who creates own music</label><br>
+                <input type="radio" id="over_13" value="notartist" name="isartist"><label for="over_13"
+                    class="light">Listener who
+                    loves to listen music</label>
+            </fieldset>
+
+            <h5> <a href="{{url_for('auth.registration') }}"> Already have an account? </a> </h5>
+
+            <button type="submit">Sign Up</button>
+
+        </form>
+    </body>
+
+</html>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!---Weekly Top 15--->
+<div class="ms_weekly_wrapper">
+    <div class="ms_weekly_inner">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ms_heading">
+                    <h1>weekly top 15</h1>
+                </div>
+            </div>
+            {% for music in musics %}
+            <div class="col-lg-4 col-md-12 padding_right40">
+                <div class="ms_weekly_box">
+                    <div class="weekly_left">
+                        <span class="w_top_no">
+                            {{ loop.index}}
+                        </span>
+                        <div class="w_top_song">
+                            <div class="w_tp_song_img">
+                                <img src="{{ url_for('static', filename=music.album_img) }}" alt="" class="img-fluid">
+                                <div class="ms_song_overlay">
+                                </div>
+                                <div class="ms_play_icon playing" music_source="{{ music.music_source }}" musics="{{ musics }}"
+                                    music_id="{{ music.id}}" artist_name="{{ music.name }}" music_title="{{ music.music_title }}"
+                                    album_img="{{ music.album_img }}">
+                                    <img src="{{ url_for('static', filename='images/svg/play.svg') }}" alt="">
+                                </div>
+                            </div>
+                            <div class="w_tp_song_name">
+                                <h3><a href="#">{{ music.music_title }}</a></h3>
+                                <a href="/artists/{{music.artist_id}}"><p class="artist_link">{{ music.name }}</p></a>
+                            </div>
+                        </div>
+                    </div>
+                    {% if current_user.is_authenticated %}
+                    <div class="weekly_right">
+                        <i class="fv_btn btn text-white fa-heart {{ 'far' if music.is_favourite == None else 'fas' }}"
+                            music_id="{{ music.id }}"></i>
+                    </div>
+                    {% else %}
+                    <div class="weekly_right">
+                        <i class="far fa-heart text-white" style="font-size: 24px"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="ms_divider"></div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="ms_releases_wrapper">
+    <div class="ms_heading">
+        <h1>New Releases</h1>
+        <span class="veiw_all"><a href="#">view more</a></span>
+    </div>
+    <div class="ms_release_slider swiper-container">
+        <div class="ms_divider"></div>
+        <div class="swiper-wrapper">
+            {% for music in musics %}
+            <div class="swiper-slide">
+                <div class="ms_release_box">
+                    <div class="w_top_song">
+                        <span class="slider_dot"></span>
+                        <div class="w_tp_song_img">
+                            <img src="{{ url_for('static', filename=music.album_img) }}" alt="">
+                            <div class="ms_song_overlay">
+                            </div>
+                            <div class="ms_play_icon playing" music_source="{{ music.music_source }}" musics="{{ musics }}"
+                                music_id="{{ music.id}}" artist_name="{{ music.name }}" music_title="{{ music.music_title }}"
+                                album_img="{{ music.album_img }}">
+                                <img src="{{ url_for('static', filename='images/svg/play.svg') }}" alt="">
+                            </div>
+                        </div>
+                        <div class="w_tp_song_name">
+                            <h3><a href="#">{{ music.music_title }}</a></h3>
+                            <p>{{ music.name }}</p>
+                        </div>
+                    </div>
+                    <div class=" weekly_right">
+                        <span class="w_song_time">5:10</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="swiper-button-next2 slider_nav_next"></div>
+    <div class="swiper-button-prev2 slider_nav_prev"></div>
+</div>
+<div class="">
+    <script>
+        $(document).ready(function () {
+            $('.fv_btn').click(function () {
+                let el = $(this)
+                let action = 'add';
+                let firstClass = 'far';
+                let secondClass = 'fas';
+
+                if (el.hasClass('fas')) {
+                    action = 'remove';
+                    firstClass = 'fas';
+                    secondClass = 'far';
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/favourites/" + action,
+                    data: {
+                        music_id: $(this).attr("music_id")
+                    },
+                    success: function (resp) {
+                        el.removeClass(firstClass).addClass(secondClass)
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                })
+            })
+        })
+    </script>
+</div>
+{% endblock %}

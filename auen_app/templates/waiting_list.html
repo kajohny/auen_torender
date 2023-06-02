@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="{{url_for('main.upload_audio')}}" method="POST">
+    <div class="ms_weekly_wrapper">
+        <div class="ms_weekly_inner">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ms_heading">
+                        <h1>Approval List</h1>
+                    </div>
+                </div>
+                {% for music in musics %}
+                <div class="ms_weekly_box">
+                    <div class="weekly_left">
+                        <span class="w_top_no">
+                            {{ loop.index}}
+                        </span>
+                        <div class="w_top_song">
+                            <div class="w_tp_song_img">
+                                <img src="{{ url_for('static', filename=music.album_img) }}" alt="" class="img-fluid">
+                                <div class="ms_song_overlay">
+                                </div>
+                                <div class="ms_play_icon" music_source="{{ music.source }}" musics="{{ musics }}"
+                                    music_id="{{ music.id }}" artist_name="{{ music.name }}"
+                                    music_title="{{ music.title }}" album_img="{{ music.album_img }}">
+                                    <img src="{{ url_for('static', filename='images/svg/play.svg') }}" alt="">
+                                </div>
+                            </div>
+                            <div class="w_tp_song_name">
+                                <h3><a href="#">{{ music.title }} </a></h3>
+                                {% if music.featured_artist != None %}
+                                <p>{{ music.name }} feat. {{ music.featured_artist }}</p>
+                                {% else %}
+                                <p>{{ music.name }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <button type="submit" id="submit_btn" class="submit_btn btn-success btn-lg btn-block"
+            style="margin: 0 auto; display: flex; text-align: center; margin-bottom: 10px; padding: 20px;">Submit</button>
+        <button type="button" class="btn-danger btn-lg btn-block"
+            style="margin: 0 auto; display: flex; text-align: center; margin-bottom: 10px; padding: 20px;">Delete</button>
+    </div>
+</form>
+
+<script>
+    function remove(el) {
+        var element = el;
+        element.remove();
+    }
+</script>
+<!-- <script>
+    $(document).ready(function () {
+        $('.collab_btn').click(function () {
+            let el = $(this)
+            let firstClass = 'fa-microphone';
+            let secondClass = 'fa-microphone-slash';
+            var container = document.getElementById("div_cont");
+            var jopa = document.getElementById("hello");
+            console.log(jopa);
+
+            if (el.hasClass('fa-microphone-slash')) {
+                firstClass = 'fa-microphone-slash';
+                secondClass = 'fa-microphone';
+                container.removeChild(container.firstChild);
+                
+            } else {
+                var inputCollab = document.createElement("input");
+                inputCollab.type = "text";
+                inputCollab.id = "artist_name";
+                inputCollab.className = "form-control";
+                container.appendChild(inputCollab);
+            }
+            el.removeClass(firstClass).addClass(secondClass);
+        })
+    })
+</script> -->
+{% endblock %}

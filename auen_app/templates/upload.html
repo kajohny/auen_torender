@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+<!----Edit Profile Wrapper Start---->
+<div class="ms_profile_wrapper">
+    <h1>Upload</h1>
+    <div class="ms_profile_box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% if counter == 5 %}
+        {% else %}
+        <form action="" method="POST" enctype="multipart/form-data" id="form-cont">
+            <div class="ms_pro_form">
+                <div class="frame" id="div_frame" style="display: none;">
+                    <img src="{{url_for('static', filename='images/albums/images.jfif')}}" id="img_standard"
+                        class="rounded" style="margin: 0 auto; display: flex; display: none;">
+                </div>
+                <button class="" id="btn_input" style="margin: 0 auto; display: flex; display: none; font-size:15px;"
+                    onclick="document.getElementById('img-file').click(); return false;"><i
+                        class="fa-solid fa-file-arrow-up"></i> Upload Album/Single Image</button>
+                <input id="img-file" name="img-file" type="file" style="visibility:hidden;" accept="image/*">
+
+                <hr style="border: 1px solid rosybrown; margin-bottom: 10px;">
+
+                <div class="form-group" id="input-cont">
+                </div>
+                <div class="ui-widget">
+                    <label for="tags" id="audio" style="color:black;">Upload Audio(s):</label>
+                    <input type="file" class="form-control" id="audiofiles" name="file"
+                        placeholder="select a file to upload" accept=".mp3, .wav" required>
+                    <br />
+                    <input type="submit" name="submit" class="btn-success" value="Submit">
+                </div>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+<script>
+    var img_input = document.getElementById('img-file');
+    var img_music = document.getElementById('img_standard');
+
+    img_input.addEventListener('change', (event) => {
+        const img_file = event.target.files[0];
+        if (img_file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(img_file);
+            reader.addEventListener('load', () => {
+                img_music.src = reader.result;
+            })
+        }
+    });
+
+    function remove(el) {
+        var element = el;
+        element.remove();
+    }
+</script>
+<script>
+    var audiofiles = document.getElementById("audiofiles")
+    var container = document.getElementById("input-cont");
+    var container_img = document.getElementById("input-img-cont");
+    var div_frame = document.getElementById("div_frame");
+
+    audiofiles.addEventListener("change", handleFiles, false);
+
+    function handleFiles() {
+        if (container.hasChildNodes) {
+            var btn_input = document.getElementById('btn_input');
+            var song_image = document.getElementById('img_standard');
+            btn_input.style.display = "block";
+            song_image.style.display = "block";
+            div_frame.style.display = "block";
+        }
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+        let file = this.files[0];
+        var input = document.createElement("input");
+        var inputArtist = document.createElement("input")
+        input.type = "text";
+        input.name = "title";
+        input.className = "form-control";
+        input.value = file.name.replace(".mp3", "");
+
+        inputArtist.type = "text"
+        inputArtist.name = "artist_name";
+        inputArtist.className = "form-control";
+        inputArtist.placeholder =
+            "Enter artist's name with whom you made a collaboration. Leave blank if there is no such."
+
+        container.appendChild(input);
+        container.appendChild(inputArtist);
+    }
+</script>
+{% endblock %}

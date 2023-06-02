@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="ms_profile_wrapper">
+    <h1>Create Playlist</h1>
+    <div class="ms_profile_box">
+        <form action="" method="POST">
+            <div class="ms_pro_form">
+                <div class="form-group">
+                    <label>Playlist name</label>
+                    <input type="text" class="form-control" name="playlist_name">
+                </div>
+                <div class="pro-form-btn text-center marger_top15">
+                    <button class="ms_btn">Save</button>
+
+                </div>
+                <div class="pro-form-btn text-center marger_top15">
+                    <a href="{{ url_for('main.playlist_user') }}" class="ms_btn">Go back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
