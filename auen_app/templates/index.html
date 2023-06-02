@@ -66,19 +66,6 @@
                         <i class="fv_btn btn text-white fa-heart {{ 'far' if musics[i].is_favourite == None else 'fas' }}"
                             music_id="{{ musics[i].id }}"></i>
                     </div>
-                    <div class="weekly_right">
-                        <li class="text-center ms_more_icon"><a href="javascript:;"><span
-                                    class="ms_icon1 ms_active_icon icon_playlist"></span></a>
-                            <ul class="more_option">
-                                {% for playlist in playlists %}
-                                <li class="pl_btn" playlist_id="{{ playlist.id }}" music_id="{{ music.id }}"><a
-                                        href="#"><span class="opt_icon"><span
-                                                class="icon icon_playlst"></span></span>{{ playlist.playlist_name }}</a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    </div>
                     {% else %}
                     <div class="weekly_right">
                         <i class="far fa-heart text-white" style="font-size: 24px"></i>
