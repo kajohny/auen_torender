@@ -245,7 +245,6 @@ def approval_list(artist_id):
     return musics_schema.jsonify(musics)
 
 @api.route('/upload_audio/<artist_id>', methods=["POST"])
-@login_required
 def upload_audio(artist_id):
     musics = db.session.query(WaitingAudios.id, WaitingAudios.title, WaitingAudios.source, User.name, 
                               WaitingReleases.album_img, WaitingReleases.album_title, WaitingAudios.featured_artist)\
