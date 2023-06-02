@@ -205,38 +205,31 @@ def album_songs(album_id):
 
 @api.route('/upload/api/<artist_id>', methods=["POST"])
 def upload(artist_id):
-    files = request.files.getlist('file')
-    titles = request.form.getlist('title')
-    artist_name = request.form.getlist('artist_name')
-        
-    if(len(files) > 1):
-        album_title = request.form.get('album_title')
-    else:
-        album_title = request.form.get('title')
-
-        img_file = request.files['img-file']
+    file = request.files['file']
+    title = request.form['title']
+    artist_name = request.form['artist_name']
+    img_file = request.files['img-file']
 
     if img_file.filename:
         img_file.save(os.path.join("auen_app/static/images/albums", img_file.filename))
-        waiting_release = WaitingReleases(album_title = album_title, album_img = 'images/albums/' + img_file.filename, author_id=artist_id)
+        waiting_release = WaitingReleases(album_title = title, album_img = 'images/albums/' + img_file.filename, author_id=artist_id)
     else:
-        waiting_release = WaitingReleases(album_title = album_title, album_img = 'images/albums/images.jfif', author_id=artist_id)
+        waiting_release = WaitingReleases(album_title = title, album_img = 'images/albums/images.jfif', author_id=artist_id)
     db.session.add(waiting_release)
     db.session.commit()
 
-    waiting_release = WaitingReleases.query.filter_by(album_title=album_title).first()
+    waiting_release = WaitingReleases.query.filter_by(album_title=title).first()
 
-    for i in range(len(files)):
-        fixedFilename = re.sub('[^A-Za-z0-9.]+', '', files[i].filename)
-        files[i].save(os.path.join("auen_app/static/audio", fixedFilename))
-        if artist_name[i] == "":
-            add_audio = WaitingAudios(title = titles[i], source="/static/audio/" + fixedFilename, album_id = waiting_release.id, 
-                                      artist_id = current_user.id)
-        else:
-            add_audio = WaitingAudios(title = titles[i], source="/static/audio/" + fixedFilename, album_id = waiting_release.id, 
-                                      artist_id = current_user.id, featured_artist = artist_name[i])
-        db.session.add(add_audio)
-        db.session.commit()
+    fixedFilename = re.sub('[^A-Za-z0-9.]+', '', file.filename)
+    file.save(os.path.join("auen_app/static/music", fixedFilename))
+    if artist_name is None:
+        add_audio = WaitingAudios(title = title, source="/static/music/" + fixedFilename, album_id = waiting_release.id, 
+                                    artist_id = artist_id)
+    else:
+        add_audio = WaitingAudios(title = title, source="/static/music/" + fixedFilename, album_id = waiting_release.id, 
+                                      artist_id = artist_id, featured_artist = artist_name)
+    db.session.add(add_audio)
+    db.session.commit()
 
     return jsonify(['success'])
 @api.route('/approval_list/<artist_id>', methods=["GET"])
@@ -364,7 +357,7 @@ def search():
 def feed(user_id):
     musics = db.session.query(Music.id, Music.music_title, Music.music_source, User.name, Albums.album_img, Albums.album_title, 
                               Music.time_added.label('time_added'))\
-            .join(User, Music.artist_id == User.id).join(Music, and_(Music.id == Music.album_id, Music.author_id == User.id))\
+            .join(User, Music.artist_id == User.id).join(Music, and_(Albums.id == Music.album_id, Music.author_id == User.id))\
             .join(Followers, Followers.followed_id == User.id).filter(Followers.follower_id == user_id)\
             .join(Albums, Albums.id == Music.album_id)\
             .group_by(Music.id, User.name, Music.music_title, Music.music_source, Music.time_added, Albums.album_title, 
