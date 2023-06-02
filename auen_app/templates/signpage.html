@@ -28,6 +28,14 @@
                 <a href=""><img src="{{url_for('static', filename='images/logo_SIGN.png') }}" alt=""></a>
             </div>
 
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="notification is-danger" style="color: red;">
+                {{ messages[0] }}
+            </div>
+            {% endif %}
+            {% endwith %}
+            
             <fieldset>
 
                 <label for="name">Nickname</label>

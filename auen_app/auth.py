@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, login_user, logout_user
 from .models import User
 from . import db    
+import re
 
 auth = Blueprint('auth', __name__)
 
@@ -27,6 +28,9 @@ def registration():
         password = request.form.get('password')
         password_confirm = request.form.get('password_confirm')
         isartist = request.form.get('isartist')
+
+        password_regex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[#?!@$%^&*-]).{8,}$"
+
         if isartist == "artist":
             isartist = True
         else:
@@ -41,6 +45,8 @@ def registration():
         else:
             if password != password_confirm:
                 flash('Passwords do not match')
+            elif re.match(password_regex, password) is None:
+                flash('Password should contain at least 8 characters. At least one uppercase English letter. At least one lowercase English letter. At least one special character')
             else:
                 reg_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'), image=image, isartist=isartist)
                 db.session.add(reg_user)
