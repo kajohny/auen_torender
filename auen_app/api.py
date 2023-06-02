@@ -264,7 +264,7 @@ def upload_audio(artist_id):
     release = Albums.query.filter_by(album_title=waiting_releases.album_title).first()
 
     for music in musics:
-        add_audio = Music(music_title=music.title, music_source=music.source, artist_id=artist_id, album_id=release.id, 
+        add_audio = Music(music_title=music.title, music_source=music.source, author_id=artist_id, album_id=release.id, 
                            featured_artist=music.featured_artist)
         db.session.add(add_audio)
         db.session.commit()
